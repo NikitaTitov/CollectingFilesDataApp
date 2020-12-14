@@ -1,4 +1,5 @@
 import argparse
+import re
 from pathlib import Path
 
 parser = argparse.ArgumentParser(
@@ -16,16 +17,24 @@ parser.add_argument(
 args = parser.parse_args()
 
 
+def clean_up_text(file_text) -> str:
+    result_file_text = re.sub(r'(import [a-zA-Z]+.+;)|(package [a-zA-Z]+.+;)', '', file_text)
+    result_file_text = re.sub(r'(?s:\/\*.*?\*\/)|\/\/.*', '', result_file_text)
+    result_file_text = re.sub(r'\n{3,}', '\n', result_file_text)
+    result_file_text = re.sub(r'\t\n', '', result_file_text)
+    return result_file_text
+
+
 def accumulate_all_java_file_to_file():
     print('Searching, path is ' + args.dir + '\n')
 
     files_path_to_read = list(Path(args.dir).rglob(args.extension))
-    with open('./result.txt', mode='w+') as result_file:
+    with open('./result.txt', mode='w+', encoding='utf-8') as result_file:
         for file in files_path_to_read:
-            with open(file.absolute().__str__()) as reader:
-                result_file.write('Class name is: ' + file.name.__str__() + '\n\n')
-                result_file.write(reader.read())
-                result_file.write('End class ' + file.name.__str__() + '\n\n')
+            with open(file.absolute().__str__(), encoding='utf-8') as reader:
+                file_text = reader.read()
+                file_text = clean_up_text(file_text)
+                result_file.write(file_text)
     print(str(files_path_to_read.__len__()) + ' Files was founded and written to result file')
 
 
