@@ -1,0 +1,5 @@
+java_package_imports_regexp = r'(import [a-zA-Z]+.+;)|(package [a-zA-Z]+.+;)'
+kotlin_package_imports_regexp = r'(import [a-zA-Z]+.+)|(package [a-zA-Z]+.+)'
+java_kotlin_comments_regexp = r'(?s:\/\*.*?\*\/)|\/\/.*'
+new_line_endings_regexp = r'\n{3,}'
+empty_lines_with_tabs_regexp = r'\t\n'
