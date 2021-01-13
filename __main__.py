@@ -7,7 +7,7 @@ from app.supported_extentions import *
 
 parser = argparse.ArgumentParser(
     description='Program for searching and summarising text of all founded by extension \n Supported extensions: '
-                '*.txt, *.java, *.class, *.kt'
+                '*.txt, *.java, *.class, *.kt, *.ts'
 )
 parser.add_argument('-dir', default='.', help='Root directory')
 parser.add_argument(
@@ -18,7 +18,7 @@ parser.add_argument(
 parser.add_argument(
     '-fileExt',
     default=java_extension,
-    choices=[java_extension, class_extension, text_extension, kotlin_extension],
+    choices=[java_extension, class_extension, text_extension, kotlin_extension, typescript_extension],
     help='File extension which will be searched'
 )
 
@@ -30,6 +30,8 @@ def remove_packages_imports(file_extension, file_text) -> str:
         result_file_text = re.sub(java_package_imports_regexp, '', file_text)
     elif file_extension == kotlin_extension:
         result_file_text = re.sub(kotlin_package_imports_regexp, '', file_text)
+    elif file_extension == typescript_extension:
+        result_file_text = re.sub(typescript_package_imports_regexp, '', file_text)
     else:
         result_file_text = file_text
     return result_file_text
